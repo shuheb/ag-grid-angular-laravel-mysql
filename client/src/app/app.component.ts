@@ -6,7 +6,6 @@ import { Athlete } from './athlete';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'client';
@@ -28,6 +27,20 @@ export class AppComponent {
       {
         field: 'athlete',
         minWidth: 150,
+        filter:true,
+        filterParams: {
+          values: params => {
+            var values = this.athleteService.getValuesFromServer(JSON.stringify(params.colDef.field)).subscribe(data => {
+            
+              let results = data.map(row=>row.athlete);
+              params.success(results);
+            });
+
+            
+
+            
+          }
+        }
       },
       {
         field: 'age',

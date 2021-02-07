@@ -11,7 +11,8 @@ import { MessageService } from './message.service';
   providedIn: 'root'
 })
 export class AthleteService {
-private apiUrl = 'http://localhost:8000/api/athletes'
+private apiUrl = 'http://localhost:8000/api/athletes';
+private apiSetFilterUrl = 'http://localhost:8000/api/setFilterValues';
 
 httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -30,6 +31,14 @@ constructor(private http: HttpClient,
         tap(_ => this.log('fetched Athletes')),
         catchError(this.handleError<Athlete>('getAthletes', ))
       );
+  }
+
+  getValuesFromServer(header): Observable<any> {
+
+    return this.http.post<any>(this.apiSetFilterUrl, header, this.httpOptions).pipe(
+      tap(_ => this.log('fetched set filter values')),
+      catchError(this.handleError<any>('getValuesFromServer',[] ))
+    );
   }
 
   /**
