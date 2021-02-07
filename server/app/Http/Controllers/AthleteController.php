@@ -11,8 +11,11 @@ class AthleteController extends Controller
 
     public function getSetFilterValues(Request $request)
     {
-        $SQL = DB::select("SELECT DISTINCT athlete FROM ATHLETES ");
-        return $SQL;
+        $field = $request->input('field');
+        $SQL = "SELECT DISTINCT " . $field . " FROM ATHLETES ORDER BY " . $field . " ASC; ";
+        $results = DB::select($SQL);
+        $flatResults = array_column($results, $field);
+        return $flatResults;
     }
 
     public function getData(Request $request)
@@ -93,10 +96,16 @@ class AthleteController extends Controller
         }
 
         if ($filterModel) {
-            //
+            foreach ($filterModel as $key => $value) {
+                if ($value['filterType'] == 'set') {
+                    // array_push($whereParts, $key . ' IN ("' . join("', '", $value) . "')");
+                }
+            }
+            return;
         }
 
         if (sizeof($whereParts) > 0) {
+            Log::debug($whereParts);
             $x = join(' and ', $whereParts);
 
             return " WHERE {$x} ";
