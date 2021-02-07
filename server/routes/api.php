@@ -21,6 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('athletes', [AthleteController::class, 'getData']);
 
+Route::post('setFilterValues', [AthleteController::class, 'getSetFilterValues']);
+
 Route::get('athletes', function (Request $request) {
     return response()->json([
         'test' => 'test'

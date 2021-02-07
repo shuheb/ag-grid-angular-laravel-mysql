@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Log;
 
 class AthleteController extends Controller
 {
+
+    public function getSetFilterValues(Request $request)
+    {
+        $SQL = DB::select("SELECT DISTINCT athlete FROM ATHLETES ");
+        return $SQL;
+    }
+
     public function getData(Request $request)
     {
         // logic to get all Athletes goes here
