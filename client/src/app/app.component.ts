@@ -27,18 +27,13 @@ export class AppComponent {
       {
         field: 'athlete',
         minWidth: 150,
-        filter:true,
+        filter: 'agSetColumnFilter',
         filterParams: {
           values: params => {
-            var values = this.athleteService.getValuesFromServer(JSON.stringify(params.colDef.field)).subscribe(data => {
-            
-              let results = data.map(row=>row.athlete);
-              params.success(results);
+            const field = params.colDef.field;
+            this.athleteService.getValuesFromServer(field).subscribe(data => {
+              params.success(data);
             });
-
-            
-
-            
           }
         }
       },
@@ -49,6 +44,15 @@ export class AppComponent {
       {
         field: 'country',
         minWidth: 150,
+        filter: 'agSetColumnFilter',
+        filterParams: {
+          values: params => {
+            const field = params.colDef.field;
+            this.athleteService.getValuesFromServer(field).subscribe(data => {
+              params.success(data);
+            });
+          }
+        }
       },
       {
         field: 'year',

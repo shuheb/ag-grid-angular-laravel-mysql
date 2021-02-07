@@ -33,9 +33,9 @@ constructor(private http: HttpClient,
       );
   }
 
-  getValuesFromServer(header): Observable<any> {
+  getValuesFromServer(field): Observable<any> {
 
-    return this.http.post<any>(this.apiSetFilterUrl, header, this.httpOptions).pipe(
+    return this.http.post<any>(this.apiSetFilterUrl, {field}, this.httpOptions).pipe(
       tap(_ => this.log('fetched set filter values')),
       catchError(this.handleError<any>('getValuesFromServer',[] ))
     );
