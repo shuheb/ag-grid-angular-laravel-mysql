@@ -185,15 +185,11 @@ class AthleteController extends Controller
             return 0;
         }
         $currentLastRow = $request['startRow'] + sizeof($results);
-        // Log::debug('$currentLastRow -> ' . $currentLastRow);
-        // Log::debug(('endRow -> ' . $request['endRow']));
         if ($currentLastRow <= $request['endRow']) {
             return $currentLastRow;
         } else {
-            // Log::debug('return -1');
             return -1;
         }
-        // return $currentLastRow <= $request['endRow'] ? $currentLastRow : -1;
     }
 
     public function cutResultsToPageSize($request, $results)
@@ -207,43 +203,5 @@ class AthleteController extends Controller
         } else {
             return $results;
         }
-    }
-
-
-
-
-    public function createAthlete(Request $request)
-    {
-        // logic to create a Athlete record goes here
-
-        return response()->json([
-            "message" => "Student not found"
-        ], 404);
-    }
-
-
-    public function getAthlete($id)
-    {
-        // logic to get a Athlete record goes 
-
-        return response()->json([
-            "message" => "Student not found"
-        ], 404);
-    }
-
-    public function updateAthlete(Request $request, $id)
-    {
-        // logic to update a Athlete record goes here
-        return response()->json([
-            "message" => "Student not found"
-        ], 404);
-    }
-
-    public function deleteAthlete($id)
-    {
-        // logic to delete a student record goes here
-        return response()->json([
-            "message" => "Student not found"
-        ], 404);
     }
 }
