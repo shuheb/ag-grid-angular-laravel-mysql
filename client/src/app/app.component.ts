@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'ag-grid-enterprise'
-import { AthleteService} from "./athlete.service";
+import { AthleteService } from "./athlete.service";
 import { Athlete } from './athlete';
 @Component({
   selector: 'app-root',
@@ -12,18 +12,18 @@ export class AppComponent {
   private gridApi;
   private gridColumnApi;
 
-  
-   columnDefs;
-   defaultColDef;
-   rowData;
-    rowModelType;
-   serverSideStoreType;
-   paginationPageSize;
-   
 
-  constructor(private athleteService:AthleteService) {
+  columnDefs;
+  defaultColDef;
+  rowData;
+  rowModelType;
+  serverSideStoreType;
+  paginationPageSize;
+
+
+  constructor(private athleteService: AthleteService) {
     this.columnDefs = [
-      {field:'id'},
+      { field: 'id' },
       {
         field: 'athlete',
         minWidth: 150,
@@ -78,29 +78,31 @@ export class AppComponent {
     this.rowModelType = 'serverSide';
     this.serverSideStoreType = 'partial';
     this.rowData = [];
-    this.paginationPageSize= 250;
+    this.paginationPageSize = 250;
   }
 
   onGridReady(params) {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
 
-   
+
 
     const datasource = {
       getRows: (params) => {
-          console.log(params.request);
-          this.athleteService.getAthletes(JSON.stringify({...params.request})).subscribe(data=> 
-            params.success({
-                  rowData: data.rows,
-                  rowCount: data.lastRow
-              })
-          )
+        console.log(params.request);
+        this.athleteService.getAthletes(JSON.stringify({ ...params.request })).subscribe(response => {
+          console.log(response)
+          params.success({
+            rowData: response.rows,
+            rowCount: response.lastRow
+          })
+        }
+        )
       }
 
-  };
+    };
 
-  params.api.setServerSideDatasource(datasource);
-    
+    params.api.setServerSideDatasource(datasource);
+
   }
 }
