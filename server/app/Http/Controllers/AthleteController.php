@@ -26,6 +26,7 @@ class AthleteController extends Controller
         Log::debug($SQL);
 
         $results = DB::select($SQL);
+        // Log::debug($SQL);
         $rowCount = $this->getRowCount($request, $results);
         $resultsForPage = $this->cutResultsToPageSize($request, $results);
         return ['rows' => $resultsForPage, 'lastRow' => $rowCount];
@@ -85,7 +86,7 @@ class AthleteController extends Controller
         $groupKeys = $request->input('groupKeys');
         $filterModel = $request->input('filterModel');
 
-        $that = $this;
+        // Log::debug($filterModel);
         $whereParts = [];
 
         if (sizeof($groupKeys) > 0) {
@@ -98,19 +99,22 @@ class AthleteController extends Controller
         if ($filterModel) {
             foreach ($filterModel as $key => $value) {
                 if ($value['filterType'] == 'set') {
-                    // array_push($whereParts, $key . ' IN ("' . join("', '", $value) . "')");
+
+
+
+                    array_push($whereParts, $key . " IN ('" . join('\', \'', $value['values']) . "')");
                 }
             }
-            return;
         }
-
+        Log::debug($whereParts);
         if (sizeof($whereParts) > 0) {
-            Log::debug($whereParts);
+
+
             $x = join(' and ', $whereParts);
 
-            return " WHERE {$x} ";
+            return "WHERE {$x} ";
         } else {
-            return '';
+            return "";
         }
     }
 
@@ -177,7 +181,8 @@ class AthleteController extends Controller
 
 
         if (is_null($results) || !isset($results) || sizeof($results) == 0) {
-            return null;
+            // or return null
+            return 0;
         }
         $currentLastRow = $request['startRow'] + sizeof($results);
         // Log::debug('$currentLastRow -> ' . $currentLastRow);
@@ -185,7 +190,7 @@ class AthleteController extends Controller
         if ($currentLastRow <= $request['endRow']) {
             return $currentLastRow;
         } else {
-            Log::debug('return -1');
+            // Log::debug('return -1');
             return -1;
         }
         // return $currentLastRow <= $request['endRow'] ? $currentLastRow : -1;
