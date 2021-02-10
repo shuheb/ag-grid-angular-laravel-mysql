@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import 'ag-grid-enterprise'
-import { ServerSideDatasourceService } from "./server-side-datasource.service";
+import 'ag-grid-enterprise';
+import { ServerSideDatasource } from "./server-side-datasource";
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -18,7 +18,7 @@ export class AppComponent {
   public paginationPageSize;
   public autoGroupColumnDef;
 
-  constructor(private serverSideDatasource: ServerSideDatasourceService) {
+  constructor(private datasource: ServerSideDatasource) {
     this.columnDefs = [
       { headerName: 'ID', field: 'id', maxWidth: 75 },
       {
@@ -65,10 +65,10 @@ export class AppComponent {
     }
   }
 
-  // generic function to call server-side service to get the set filter values for a given column
-  getValuesAsync(params): void {
+  // generic function to call datasource to get the set filter values for a given column
+  getValuesAsync(params) {
     const field = params.colDef.field;
-    this.serverSideDatasource.getSetFilterValues(field).subscribe(data => params.success(data));
+    this.datasource.getSetFilterValues(params, field);
   }
 
   onGridReady(params): void {
@@ -76,7 +76,8 @@ export class AppComponent {
     this.gridColumnApi = params.columnApi;
 
     // setting the datasource, the grid will call getRows to pass the request
-    params.api.setServerSideDatasource(this.serverSideDatasource);
+    params.api.setServerSideDatasource(this.datasource);
 
   }
+
 }

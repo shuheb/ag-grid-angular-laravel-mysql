@@ -4,13 +4,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { Athlete } from './athlete';
 import { MessageService } from './message.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServerSideDatasourceService {
+export class OlympicWinnersService {
   private apiUrl = 'http://localhost:8000/api/athletes';
   private apiSetFilterUrl = 'http://localhost:8000/api/setFilterValues';
 
@@ -20,23 +19,22 @@ export class ServerSideDatasourceService {
 
   constructor(private http: HttpClient,
     private messageService: MessageService) { }
-  /** GET heroes from the server */
 
 
-  getSetFilterValues(field): Observable<any> {
-    return this.http.post<any>(this.apiSetFilterUrl, { field }, this.httpOptions).pipe(
-      tap(_ => this.log('fetched set filter values')),
-      catchError(this.handleError<any>('getValuesFromServer', []))
-    );
+  getRows(header): Observable<any> {
+    return this.http.post<any>(this.apiUrl, header, this.httpOptions)
+      .pipe(
+        tap(_ => this.log('fetched Athletes')),
+        catchError(this.handleError<any>('getAthletes',))
+      );
   }
 
-  getRows(params) {
-    this.http.post<Athlete>(this.apiUrl, params.request, this.httpOptions).subscribe(response => {
-      params.success({
-        rowData: response.rows,
-        rowCount: response.lastRow
-      })
-    })
+  getValues(field): Observable<any> {
+    console.log(field)
+    return this.http.post<any>(this.apiSetFilterUrl, { field }, this.httpOptions).pipe(
+      tap(_ => this.log('fetched set filter values')),
+      catchError(this.handleError<any>('getValues', []))
+    );
   }
 
   /**
@@ -61,6 +59,7 @@ export class ServerSideDatasourceService {
 
   /** Log a HeroService message with the MessageService */
   private log(message: string) {
+    console.log(message)
     this.messageService.add(`HeroService: ${message}`);
   }
 }
