@@ -10,35 +10,33 @@ import { MessageService } from './message.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AthleteService {
-private apiUrl = 'http://localhost:8000/api/athletes';
-private apiSetFilterUrl = 'http://localhost:8000/api/setFilterValues';
+export class ServerSideDatasourceService {
+  private apiUrl = 'http://localhost:8000/api/athletes';
+  private apiSetFilterUrl = 'http://localhost:8000/api/setFilterValues';
 
-httpOptions = {
+  httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
-  
-constructor(private http: HttpClient,
-  private messageService: MessageService) { }
-/** GET heroes from the server */
-  getAthletes(header): Observable<Athlete>  {
-    // return this.http.get(API_URL + 'athletes').pipe(map(data=> {})).subscribe(result => {
-    //   console.log(result)
-    // })
 
-    return this.http.post<Athlete>(this.apiUrl, header, this.httpOptions)
-      .pipe(
-        tap(_ => this.log('fetched Athletes')),
-        catchError(this.handleError<Athlete>('getAthletes', ))
-      );
+  constructor(private http: HttpClient,
+    private messageService: MessageService) { }
+  /** GET heroes from the server */
+
+
+  getSetFilterValues(field): Observable<any> {
+    return this.http.post<any>(this.apiSetFilterUrl, { field }, this.httpOptions).pipe(
+      tap(_ => this.log('fetched set filter values')),
+      catchError(this.handleError<any>('getValuesFromServer', []))
+    );
   }
 
-  getValuesFromServer(field): Observable<any> {
-
-    return this.http.post<any>(this.apiSetFilterUrl, {field}, this.httpOptions).pipe(
-      tap(_ => this.log('fetched set filter values')),
-      catchError(this.handleError<any>('getValuesFromServer',[] ))
-    );
+  getRows(params) {
+    this.http.post<Athlete>(this.apiUrl, params.request, this.httpOptions).subscribe(response => {
+      params.success({
+        rowData: response.rows,
+        rowCount: response.lastRow
+      })
+    })
   }
 
   /**
