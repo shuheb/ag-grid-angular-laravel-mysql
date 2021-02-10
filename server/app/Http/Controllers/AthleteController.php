@@ -26,7 +26,6 @@ class AthleteController extends Controller
         Log::debug($SQL);
 
         $results = DB::select($SQL);
-        // Log::debug($SQL);
         $rowCount = $this->getRowCount($request, $results);
         $resultsForPage = $this->cutResultsToPageSize($request, $results);
         return ['rows' => $resultsForPage, 'lastRow' => $rowCount];
@@ -86,13 +85,12 @@ class AthleteController extends Controller
         $groupKeys = $request->input('groupKeys');
         $filterModel = $request->input('filterModel');
 
-        // Log::debug($filterModel);
         $whereParts = [];
 
         if (sizeof($groupKeys) > 0) {
             foreach ($groupKeys as $key => $value) {
                 $colName = $rowGroupCols[$key]['field'];
-                array_push($whereParts, "{$colName} = \"{$value}\"");
+                array_push($whereParts, "{$colName} = '{$value}'");
             }
         }
 
@@ -101,12 +99,18 @@ class AthleteController extends Controller
                 if ($value['filterType'] == 'set') {
 
 
+                    if ($key == 'ag-Grid-AutoColumn') {
+                        Log::debug('$key->' . $key);
+                        Log::debug('$rowGroupCols->', $rowGroupCols);
+                        array_push($whereParts, $rowGroupCols[0]['field'] . ' IN ("'  . join('", "', $value['values']) . '")');
+                    } else {
 
-                    array_push($whereParts, $key . " IN ('" . join('\', \'', $value['values']) . "')");
+                        array_push($whereParts, $key . ' IN ("'  . join('", "', $value['values']) . '")');
+                    }
                 }
             }
         }
-        Log::debug($whereParts);
+
         if (sizeof($whereParts) > 0) {
 
 
