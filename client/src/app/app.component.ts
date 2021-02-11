@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import 'ag-grid-enterprise';
 import { ServerSideDatasource } from "./server-side-datasource";
-
+import { OlympicWinnersService } from "./olympic-winners.service";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -17,8 +17,12 @@ export class AppComponent {
   public serverSideStoreType;
   public paginationPageSize;
   public autoGroupColumnDef;
+  public datasource: ServerSideDatasource;
 
-  constructor(private datasource: ServerSideDatasource) {
+  constructor(private olympicWinnersService: OlympicWinnersService) {
+
+    this.datasource = new ServerSideDatasource(olympicWinnersService);
+
     this.columnDefs = [
       { headerName: 'ID', field: 'id', maxWidth: 75 },
       {
