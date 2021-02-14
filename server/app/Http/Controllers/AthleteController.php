@@ -20,11 +20,8 @@ class AthleteController extends Controller
 
     public function getData(Request $request)
     {
-        // logic to get all Athletes goes here
-
         $SQL = $this->buildSql($request);
         Log::debug($SQL);
-
         $results = DB::select($SQL);
         $rowCount = $this->getRowCount($request, $results);
         $resultsForPage = $this->cutResultsToPageSize($request, $results);
@@ -34,18 +31,11 @@ class AthleteController extends Controller
     public function buildSql(Request $request)
     {
         $selectSql = $this->createSelectSql($request);
-        $fromSql = "FROM ATHLETES ";
+        $fromSql = " FROM ATHLETES ";
         $whereSql = $this->whereSql($request);
         $groupBySql = $this->groupBySql($request);
         $orderBySql = $this->orderBySql($request);
         $limitSql = $this->createLimitSql($request);
-
-
-
-        // $pivotCols = $request->input('pivotCols');
-        // $pivotMode = $request->input('pivotMode');
-
-
 
         $SQL = $selectSql . $fromSql . $whereSql . $groupBySql . $orderBySql . $limitSql;
         return $SQL;
@@ -63,17 +53,11 @@ class AthleteController extends Controller
             $rowGroupCol = $rowGroupCols[sizeof($groupKeys)];
             array_push($colsToSelect, $rowGroupCol['field']);
 
-
-
             foreach ($valueCols as $key => $value) {
                 array_push($colsToSelect, $value['aggFunc'] . '(' . $value['field'] . ') as ' . $value['field']);
             }
 
-
-
-            $y =  join(", ", $colsToSelect);
-
-            return "SELECT {$y} ";
+            return "SELECT " . join(", ", $colsToSelect);
         }
 
         return "SELECT * ";
@@ -97,11 +81,8 @@ class AthleteController extends Controller
         if ($filterModel) {
             foreach ($filterModel as $key => $value) {
                 if ($value['filterType'] == 'set') {
-
-
+                    // slight hack for filtering on autoColumn
                     if ($key == 'ag-Grid-AutoColumn') {
-                        Log::debug('$key->' . $key);
-                        Log::debug('$rowGroupCols->', $rowGroupCols);
                         array_push($whereParts, $rowGroupCols[0]['field'] . ' IN ("'  . join('", "', $value['values']) . '")');
                     } else {
 
@@ -113,10 +94,7 @@ class AthleteController extends Controller
 
         if (sizeof($whereParts) > 0) {
 
-
-            $x = join(' and ', $whereParts);
-
-            return "WHERE {$x} ";
+            return " WHERE " . join(' and ', $whereParts);
         } else {
             return "";
         }
@@ -134,9 +112,7 @@ class AthleteController extends Controller
             $rowGroupCol = $rowGroupCols[sizeof($groupKeys)];
             array_push($colsToGroupBy, $rowGroupCol['field']);
 
-            $ya =  join(", ", $colsToGroupBy);
-
-            return " GROUP BY {$ya} ";
+            return " GROUP BY " . join(", ", $colsToGroupBy);
         } else {
             // select all columns
             return "";
@@ -153,9 +129,10 @@ class AthleteController extends Controller
             foreach ($sortModel as $key => $value) {
                 array_push($sortParts, $value['colId'] . " " . $value['sort']);
             }
+
             if (sizeof($sortParts) > 0) {
-                $sortBy = join(", ", $sortParts);
-                return "ORDER BY {$sortBy} ";
+                // $sortBy = join(", ", $sortParts);
+                return " ORDER BY " . join(", ", $sortParts);
             } else {
                 return '';
             }
@@ -177,7 +154,7 @@ class AthleteController extends Controller
         $endRow = $request->input('endRow');
         $pageSize = ($endRow - $startRow) + 1;
 
-        return "LIMIT {$pageSize} OFFSET {$startRow};";
+        return " LIMIT {$pageSize} OFFSET {$startRow};";
     }
 
     public function getRowCount($request, $results)
