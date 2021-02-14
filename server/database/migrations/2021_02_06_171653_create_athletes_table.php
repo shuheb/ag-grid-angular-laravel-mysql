@@ -15,6 +15,16 @@ class CreateAthletesTable extends Migration
     {
         Schema::create('athletes', function (Blueprint $table) {
             $table->id();
+            $table->string('athlete');
+            $table->integer('age')->nullable();
+            $table->string('country');
+            $table->string('year');
+            $table->string('date');
+            $table->string('sport');
+            $table->integer('gold');
+            $table->integer('silver');
+            $table->integer('bronze');
+            $table->integer('total');
             $table->timestamps();
         });
     }
