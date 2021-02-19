@@ -32,27 +32,33 @@ export class AppComponent {
           values: this.getValuesAsync.bind(this)
         }
       },
-      { field: 'age', maxWidth: 80 },
+      {
+        field: 'age', filter: 'agSetColumnFilter',
+        filterParams: {
+          values: this.getValuesAsync.bind(this)
+        },
+      },
       {
         field: 'country',
-        rowGroup: true,
-        hide: true,
+        enableRowGroup: true,
         filter: 'agSetColumnFilter',
         filterParams: {
           values: this.getValuesAsync.bind(this)
         }
       },
-      { field: 'year', maxWidth: 90 },
+      { field: 'year', enableRowGroup: true, maxWidth: 90 },
       { field: 'date' },
       { field: 'sport' },
-      { field: 'gold' },
-      { field: 'silver' },
-      { field: 'bronze' },
-      { field: 'total' },
+      { field: 'gold', aggFunc: 'sum', maxWidth: 100 },
+      { field: 'silver', aggFunc: 'sum', maxWidth: 100 },
+      { field: 'bronze', aggFunc: 'sum', maxWidth: 100 },
+      { field: 'total', aggFunc: 'sum', maxWidth: 100 },
     ];
     this.defaultColDef = {
       flex: 1,
       minWidth: 100,
+      floatingFilter: true,
+      sortable: true
     };
     this.rowModelType = 'serverSide';
     this.serverSideStoreType = 'partial';
