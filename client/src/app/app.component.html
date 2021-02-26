@@ -1,6 +1,6 @@
-<h1>Server-Side Operations With Laravel and MySQL</h1>
-<ag-grid-angular #agGrid style="width: 90%; height: 90%;" id="myGrid" class="ag-theme-alpine-dark"
+<h1 style="text-align: center;">Server-Side Operations With Laravel and MySQL</h1>
+<ag-grid-angular #agGrid style="width: 100%; height: 90%;" id="myGrid" class="ag-theme-alpine-dark"
   [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [rowModelType]="rowModelType"
-  [serverSideStoreType]="serverSideStoreType" [pagination]="true" [paginationPageSize]="paginationPageSize"
-  [enableRangeSelection]="true" [autoGroupColumnDef]="autoGroupColumnDef" [rowData]="rowData" [rowGroupPanelShow]="'always'"
+  [serverSideStoreType]="serverSideStoreType" [pagination]="true" [animateRows]="true"
+  [enableRangeSelection]="true" [paginationAutoPageSize]="true" [autoGroupColumnDef]="autoGroupColumnDef" [rowData]="rowData" [rowGroupPanelShow]="'always'"
   (gridReady)="onGridReady($event)"></ag-grid-angular>

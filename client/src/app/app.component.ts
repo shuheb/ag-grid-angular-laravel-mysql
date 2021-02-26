@@ -24,7 +24,6 @@ export class AppComponent {
     this.datasource = new ServerSideDatasource(olympicWinnersService);
 
     this.columnDefs = [
-      { headerName: 'ID', field: 'id', maxWidth: 75 },
       {
         field: 'athlete',
         filter: 'agSetColumnFilter',
@@ -46,13 +45,13 @@ export class AppComponent {
           values: this.getValuesAsync.bind(this)
         }
       },
-      { field: 'year', rowGroup:true,enableRowGroup: true, maxWidth: 90 },
-      { field: 'date' },
+      { field: 'year',enableRowGroup: true },
+      { field: 'date', sortable:false },
       { field: 'sport' },
-      { field: 'gold', aggFunc: 'sum', maxWidth: 100 },
-      { field: 'silver', aggFunc: 'sum', maxWidth: 100 },
-      { field: 'bronze', aggFunc: 'sum', maxWidth: 100 },
-      { field: 'total', aggFunc: 'sum', maxWidth: 100 },
+      { field: 'gold', aggFunc: 'sum' },
+      { field: 'silver', aggFunc: 'sum' },
+      { field: 'bronze', aggFunc: 'sum' },
+      { field: 'total', aggFunc: 'sum' },
     ];
     this.defaultColDef = {
       flex: 1,
@@ -63,7 +62,6 @@ export class AppComponent {
     this.rowModelType = 'serverSide';
     this.serverSideStoreType = 'partial';
     this.rowData = [];
-    this.paginationPageSize = 10;
     this.autoGroupColumnDef = {
       headerName: 'Group',
       minWidth: 250,

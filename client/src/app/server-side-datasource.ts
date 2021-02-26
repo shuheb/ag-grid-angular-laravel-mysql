@@ -3,7 +3,7 @@ export class ServerSideDatasource {
     constructor(private service) { }
 
     getRows(params) {
-        
+        // if filtering on group column, then change the filterModel key to have country as key
         if(params.request.filterModel['ag-Grid-AutoColumn']) {
             params.request.filterModel['country'] = params.request.filterModel['ag-Grid-AutoColumn'];
             delete params.request.filterModel['ag-Grid-AutoColumn'];
