@@ -21,7 +21,7 @@ class AthleteController extends Controller
     public function getData(Request $request)
     {
         $SQL = $this->buildSql($request);
-        Log::debug($SQL);
+        // Log::debug($SQL); for debugging purposes - logs are saved to storage/logs/laravel.log
         $results = DB::select($SQL);
         $rowCount = $this->getRowCount($request, $results);
         $resultsForPage = $this->cutResultsToPageSize($request, $results);
@@ -81,19 +81,12 @@ class AthleteController extends Controller
         if ($filterModel) {
             foreach ($filterModel as $key => $value) {
                 if ($value['filterType'] == 'set') {
-                    // slight hack for filtering on autoColumn
-                    if ($key == 'ag-Grid-AutoColumn') {
-                        array_push($whereParts, $rowGroupCols[0]['field'] . ' IN ("'  . join('", "', $value['values']) . '")');
-                    } else {
-
                         array_push($whereParts, $key . ' IN ("'  . join('", "', $value['values']) . '")');
-                    }
                 }
             }
         }
 
         if (sizeof($whereParts) > 0) {
-
             return " WHERE " . join(' and ', $whereParts);
         } else {
             return "";
@@ -122,8 +115,8 @@ class AthleteController extends Controller
     public function orderBySql(Request $request)
     {
         $sortModel = $request->input('sortModel');
-        if ($sortModel) {
 
+        if ($sortModel) {
             $sortParts = [];
 
             foreach ($sortModel as $key => $value) {
@@ -131,7 +124,6 @@ class AthleteController extends Controller
             }
 
             if (sizeof($sortParts) > 0) {
-                // $sortBy = join(", ", $sortParts);
                 return " ORDER BY " . join(", ", $sortParts);
             } else {
                 return '';
@@ -159,13 +151,13 @@ class AthleteController extends Controller
 
     public function getRowCount($request, $results)
     {
-
-
         if (is_null($results) || !isset($results) || sizeof($results) == 0) {
             // or return null
             return 0;
         }
+
         $currentLastRow = $request['startRow'] + sizeof($results);
+        
         if ($currentLastRow <= $request['endRow']) {
             return $currentLastRow;
         } else {
@@ -175,11 +167,9 @@ class AthleteController extends Controller
 
     public function cutResultsToPageSize($request, $results)
     {
-
         $pageSize = $request['endRow'] - $request['startRow'];
 
         if ($results && (sizeof($results) > $pageSize)) {
-
             return array_splice($results, 0, $pageSize);
         } else {
             return $results;
