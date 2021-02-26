@@ -3,7 +3,11 @@ export class ServerSideDatasource {
     constructor(private service) { }
 
     getRows(params) {
-        console.log('getRows ->', params);
+        
+        if(params.request.filterModel['ag-Grid-AutoColumn']) {
+            params.request.filterModel['country'] = params.request.filterModel['ag-Grid-AutoColumn'];
+            delete params.request.filterModel['ag-Grid-AutoColumn'];
+        }
         this.service.getRows(JSON.stringify({ ...params.request })).subscribe(response => params.success({
             rowData: response.rows,
             rowCount: response.lastRow

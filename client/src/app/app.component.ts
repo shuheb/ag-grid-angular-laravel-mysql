@@ -46,7 +46,7 @@ export class AppComponent {
           values: this.getValuesAsync.bind(this)
         }
       },
-      { field: 'year', enableRowGroup: true, maxWidth: 90 },
+      { field: 'year', rowGroup:true,enableRowGroup: true, maxWidth: 90 },
       { field: 'date' },
       { field: 'sport' },
       { field: 'gold', aggFunc: 'sum', maxWidth: 100 },
@@ -87,7 +87,6 @@ export class AppComponent {
 
     // setting the datasource, the grid will call getRows to pass the request
     params.api.setServerSideDatasource(this.datasource);
-
   }
 
 }
