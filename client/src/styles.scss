@@ -2,9 +2,13 @@
 @import "../node_modules/ag-grid-community/src/styles/ag-theme-alpine-dark/sass/ag-theme-alpine-dark-mixin.scss";
 
 .ag-theme-alpine-dark {
-  @include ag-theme-alpine-dark(());
+  @include ag-theme-alpine-dark((
+    alpine-active-color: #F05340,
+    range-selection-border-color: #F05340,));
 }
-
+h1 {
+  font-family: Arial, Helvetica, sans-serif;
+}
 body,
 html {
   height: 100%;
