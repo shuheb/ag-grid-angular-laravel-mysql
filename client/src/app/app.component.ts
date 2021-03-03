@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import 'ag-grid-enterprise';
-import { ServerSideDatasource } from "./server-side-datasource";
 import { OlympicWinnersService } from "./olympic-winners.service";
 @Component({
   selector: 'app-root',
@@ -17,24 +16,29 @@ export class AppComponent {
   public serverSideStoreType;
   public paginationPageSize;
   public autoGroupColumnDef;
-  public datasource: ServerSideDatasource;
 
   constructor(private olympicWinnersService: OlympicWinnersService) {
 
-    this.datasource = new ServerSideDatasource(olympicWinnersService);
+
 
     this.columnDefs = [
       {
         field: 'athlete',
         filter: 'agSetColumnFilter',
         filterParams: {
-          values: this.getValuesAsync.bind(this)
+          values: params => {
+            const field = params.colDef.field;
+            this.olympicWinnersService.getValues(field).subscribe(values => params.success(values));
+          }
         }
       },
       {
         field: 'age', filter: 'agSetColumnFilter',
         filterParams: {
-          values: this.getValuesAsync.bind(this)
+          values: params => {
+            const field = params.colDef.field;
+            this.olympicWinnersService.getValues(field).subscribe(values => params.success(values));
+          }
         },
       },
       {
@@ -42,11 +46,14 @@ export class AppComponent {
         enableRowGroup: true,
         filter: 'agSetColumnFilter',
         filterParams: {
-          values: this.getValuesAsync.bind(this)
+          values: params => {
+            const field = params.colDef.field;
+            this.olympicWinnersService.getValues(field).subscribe(values => params.success(values));
+          }
         }
       },
-      { field: 'year',enableRowGroup: true },
-      { field: 'date', sortable:false },
+      { field: 'year', enableRowGroup: true },
+      { field: 'date', sortable: false },
       { field: 'sport' },
       { field: 'gold', aggFunc: 'sum' },
       { field: 'silver', aggFunc: 'sum' },
@@ -68,23 +75,36 @@ export class AppComponent {
       field: 'country',
       filter: 'agSetColumnFilter',
       filterParams: {
-        values: this.getValuesAsync.bind(this)
+        values: params => {
+          const field = params.colDef.field;
+          this.olympicWinnersService.getValues(field).subscribe(values => params.success(values));
+        }
       }
     }
-  }
-
-  // generic function to call datasource to get the set filter values for a given column
-  getValuesAsync(params) {
-    const field = params.colDef.field;
-    this.datasource.getSetFilterValues(params, field);
   }
 
   onGridReady(params): void {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
 
+    const datasource = {
+      getRows: params => {
+
+        // if filtering on group column, then change the filterModel key to have country as key
+        if (params.request.filterModel['ag-Grid-AutoColumn']) {
+          params.request.filterModel['country'] = params.request.filterModel['ag-Grid-AutoColumn'];
+          delete params.request.filterModel['ag-Grid-AutoColumn'];
+        }
+
+        this.olympicWinnersService.getAthletes(JSON.stringify({ ...params.request })).subscribe(response => params.success({
+          rowData: response.rows,
+          rowCount: response.lastRow
+        }))
+      }
+    }
+
     // setting the datasource, the grid will call getRows to pass the request
-    params.api.setServerSideDatasource(this.datasource);
+    params.api.setServerSideDatasource(datasource);
   }
 
 }
