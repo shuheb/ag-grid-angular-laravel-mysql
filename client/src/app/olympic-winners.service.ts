@@ -21,7 +21,7 @@ export class OlympicWinnersService {
     private messageService: MessageService) { }
 
 
-  getRows(header): Observable<any> {
+  getAthletes(header): Observable<any> {
     return this.http.post<any>(this.apiUrl, header, this.httpOptions)
       .pipe(
         tap(_ => this.log('fetched Athletes')),
