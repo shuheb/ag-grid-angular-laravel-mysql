@@ -19,8 +19,6 @@ export class AppComponent {
 
   constructor(private olympicWinnersService: OlympicWinnersService) {
 
-
-
     this.columnDefs = [
       {
         field: 'athlete',
@@ -89,6 +87,7 @@ export class AppComponent {
 
     const datasource = {
       getRows: params => {
+        console.log('[Datasource] - rows requested by grid: startRow = ' + params.request.startRow + ', endRow = ' + params.request.endRow);
 
         // if filtering on group column, then change the filterModel key to have country as key
         if (params.request.filterModel['ag-Grid-AutoColumn']) {

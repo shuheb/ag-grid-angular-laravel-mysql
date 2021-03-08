@@ -10,8 +10,7 @@ import { MessageService } from './message.service';
   providedIn: 'root'
 })
 export class OlympicWinnersService {
-  private apiUrl = 'http://localhost:8000/api/athletes';
-  private apiSetFilterUrl = 'http://localhost:8000/api/setFilterValues';
+  private apiUrl = 'http://localhost:8000/api/olympicWinners';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -22,7 +21,7 @@ export class OlympicWinnersService {
 
 
   getAthletes(header): Observable<any> {
-    return this.http.post<any>(this.apiUrl, header, this.httpOptions)
+    return this.http.post(this.apiUrl, header, this.httpOptions)
       .pipe(
         tap(_ => this.log('fetched Athletes')),
         catchError(this.handleError<any>('getAthletes',))
@@ -30,8 +29,9 @@ export class OlympicWinnersService {
   }
 
   getValues(field): Observable<any> {
-    console.log(field)
-    return this.http.post<any>(this.apiSetFilterUrl, { field }, this.httpOptions).pipe(
+    const setFilterUrl = this.apiUrl + '/' + field;
+    console.log(setFilterUrl)
+    return this.http.get(setFilterUrl, this.httpOptions).pipe(
       tap(_ => this.log('fetched set filter values')),
       catchError(this.handleError<any>('getValues', []))
     );
