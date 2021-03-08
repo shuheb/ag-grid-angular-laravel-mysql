@@ -9,19 +9,17 @@ use Illuminate\Support\Facades\Log;
 class AthleteController extends Controller
 {
 
-    public function getSetFilterValues(Request $request)
+    public function getSetFilterValues(Request $request, $field)
     {
-        $field = $request->input('field');
-        $SQL = "SELECT DISTINCT " . $field . " FROM ATHLETES ORDER BY " . $field . " ASC; ";
-        $results = DB::select($SQL);
-        $flatResults = array_column($results, $field);
-        return $flatResults;
+        $values = DB::table('athletes')->select($field)->distinct()->orderBy($field, 'asc')->pluck($field);
+        return $values;
     }
 
     public function getData(Request $request)
     {
         $SQL = $this->buildSql($request);
-        // Log::debug($SQL); for debugging purposes - logs are saved to storage/logs/laravel.log
+        // for debugging purposes - logs are saved to storage/logs/laravel.log
+        Log::debug($SQL); 
         $results = DB::select($SQL);
         $rowCount = $this->getRowCount($request, $results);
         $resultsForPage = $this->cutResultsToPageSize($request, $results);
@@ -81,7 +79,7 @@ class AthleteController extends Controller
         if ($filterModel) {
             foreach ($filterModel as $key => $value) {
                 if ($value['filterType'] == 'set') {
-                        array_push($whereParts, $key . ' IN ("'  . join('", "', $value['values']) . '")');
+                    array_push($whereParts, $key . ' IN ("'  . join('", "', $value['values']) . '")');
                 }
             }
         }
@@ -157,7 +155,7 @@ class AthleteController extends Controller
         }
 
         $currentLastRow = $request['startRow'] + sizeof($results);
-        
+
         if ($currentLastRow <= $request['endRow']) {
             return $currentLastRow;
         } else {

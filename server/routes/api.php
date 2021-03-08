@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AthleteController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,12 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('athletes', [AthleteController::class, 'getData']);
+Route::post('olympicWinners', [AthleteController::class, 'getData']);
 
-Route::post('setFilterValues', [AthleteController::class, 'getSetFilterValues']);
-
-Route::get('athletes', function (Request $request) {
-    return response()->json([
-        'test' => 'test'
-    ]);
-});
+Route::get('olympicWinners/{field}', [AthleteController::class, 'getSetFilterValues']);
