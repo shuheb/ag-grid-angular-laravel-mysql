@@ -53,10 +53,10 @@ export class AppComponent {
       { field: 'year', enableRowGroup: true },
       { field: 'date', sortable: false },
       { field: 'sport' },
-      { field: 'gold', aggFunc: 'sum' },
-      { field: 'silver', aggFunc: 'sum' },
-      { field: 'bronze', aggFunc: 'sum' },
-      { field: 'total', aggFunc: 'sum' },
+      { field: 'gold', enableValue:true, aggFunc: 'sum', allowedAggFuncs:['avg','count','sum','min','max']},
+      { field: 'silver', enableValue:true, aggFunc: 'sum', allowedAggFuncs:['avg','count','sum','min','max'] },
+      { field: 'bronze', enableValue:true, aggFunc: 'sum', allowedAggFuncs:['avg','count','sum','min','max'] },
+      { field: 'total', enableValue:true, aggFunc: 'sum', allowedAggFuncs:['avg','count','sum','min','max'] },
     ];
     this.defaultColDef = {
       flex: 1,
