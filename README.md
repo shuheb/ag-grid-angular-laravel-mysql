@@ -8,6 +8,8 @@ This example implements the following features in the server-side: Grouping, Fil
 
 Here's how our grid looks with the features enabled:
 
+![alt text](./github-grid-demo.png "AG Grid demo")
+
 This repository is intended as a starting point when learning how to use the Server-Side Row Model, as it provides a simple grid implementation that uses a limited set of features and grid configurations.
 
 ## Prerequisites
