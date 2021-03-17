@@ -1,8 +1,8 @@
-# Building Server-Side Operations in AG Grid with Angular, Laravel & MySQL
+# Using AG Grid Server-Side row model with Angular, Laravel & MySQL
 
 Learn how to perform server-side operations in AG Grid using Laravel that uses the MySQL database.
 
-Please see the [accompanying blog post](https://blog.ag-grid.com/building-server-side-operations-in-ag-grid-with-angular-laravel-mysql) which explains the implementation.
+Please see the [accompanying blog post](https://blog.ag-grid.com/using-ag-grid-server-side-row-model-angular-laravel-mysql) which explains the implementation.
 
 This example implements the following features in the server-side: Grouping, Filtering, Sorting, Aggregation, Pagination, and Fetching Asynchronous Set Filter Values. 
 
