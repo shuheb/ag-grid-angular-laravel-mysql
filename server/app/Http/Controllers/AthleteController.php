@@ -29,7 +29,7 @@ class AthleteController extends Controller
     public function buildSql(Request $request)
     {
         $selectSql = $this->createSelectSql($request);
-        $fromSql = " FROM ATHLETES ";
+        $fromSql = " FROM athletes ";
         $whereSql = $this->whereSql($request);
         $groupBySql = $this->groupBySql($request);
         $orderBySql = $this->orderBySql($request);
